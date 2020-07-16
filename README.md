@@ -51,4 +51,38 @@ MSB is neglected, the following bits B6 - B0 are setting dots from top to bottom
 Default settings out of the box is a RS speed of 9600bit/s and address set to 255 (0xFF).
 
 ## Example
-coming
+Here is one super easy example for your Arduino with the help of a Max485 Module. (Schematics will come later)
+
+First we send our header by saying this is a frame (0x80), then put the command (0x89) at Addr. 0xFF (controller at address 255 or broadcast).
+Then we send our data, a byte (0, 1 or 2).
+Last we close the frame to end transmission.
+
+Done. Hello Flipdigit!
+
+```c
+byte frameHeader[]= {0x80, 0x89, 0xFF};
+byte frameClosure[]= {0x8F};
+
+void setup() {
+  Serial.begin(57600);  
+}
+
+void loop() {
+  Serial.write(frameHeader, 3);
+  Serial.write(0);
+  Serial.write(frameClosure, 1);
+  delay(500);
+  
+  Serial.write(frameHeader, 3);
+  Serial.write(1);
+  Serial.write(frameClosure, 1);
+  delay(500);
+  
+  Serial.write(frameHeader, 3);
+  Serial.write(2);
+  Serial.write(frameClosure, 1);
+  delay(500);
+}
+
+
+```
